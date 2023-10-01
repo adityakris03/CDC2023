@@ -13,7 +13,7 @@ load_dotenv()
 # print(res.json())
 
 base_url = 'https://api.spotify.com/v1/'
-headers = {'Authorization': f'Bearer {os.getenv("ACCESS_TOKEN")}'}
+headers = {'Authorization': 'Bearer BQAoSJTDoSUe2c7IMD-IQ9hJhW4-3wkYxWjbbkO-MmIitVIy7pamEH34xW5c0ZUmPp_8Cf2tkPqXZHWvX9T44C48vgh-15onTpVsZT33bdKChkGD36I'}
 def search(query):
     tracks = {}
     for i in range(0, 1000, 50):
@@ -23,7 +23,7 @@ def search(query):
         audio_features = get(base_url + 'audio-features/', headers=headers, params={'ids': ','.join([track['id'] for track in res.json()['tracks']['items']])})
         print(audio_features.status_code)
         for track, audio_f in tqdm(zip(res.json()['tracks']['items'], audio_features.json()['audio_features'])):
-            tracks[track['id']] = {'popularity': track['popularity'], 'danceability': audio_f['danceability'], 'energy': audio_f['energy'], 'key': audio_f['key'], 'loudness': audio_f['loudness'], 'mode': audio_f['mode'], 'speechiness': audio_f['speechiness'], 'acousticness': audio_f['acousticness'], 'instrumentalness': audio_f['instrumentalness'], 'liveness': audio_f['liveness'], 'valence': audio_f['valence'], 'tempo': audio_f['tempo'], 'duration_ms': audio_f['duration_ms'], 'time_signature': audio_f['time_signature']}
+            tracks[track['id']] = {'popularity': track['popularity'], 'danceability': audio_f['danceability'], 'energy': audio_f['energy'], 'key': audio_f['key'], 'loudness': audio_f['loudness'], 'mode': audio_f['mode'], 'speechiness': audio_f['speechiness'], 'acousticness': audio_f['acousticness'], 'instrumentalness': audio_f['instrumentalness'], 'liveness': audio_f['liveness'], 'valence': audio_f['valence'], 'tempo': audio_f['tempo'], 'duration_ms': audio_f['duration_ms'], 'time_signature': audio_f['time_signature'], 'genre': [artist['genres'] for artist in track['artists']]}
         time.sleep(3)
     return tracks
 
